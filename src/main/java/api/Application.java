@@ -2,22 +2,26 @@ package api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import api.StandardOutput;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
 @RestController
 public class Application {
 
 	@RequestMapping("/")
-	public StandardOutput home() {
-		return new StandardOutput("home");
+	public Map<String, Object> home() {
+
+		Map<String,Object> body = new HashMap<>();
+
+		body.put("status","OK");
+
+		return body;
 	}
 
 	@RequestMapping("/random/{numbers}")

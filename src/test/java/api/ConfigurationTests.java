@@ -52,7 +52,7 @@ public class ConfigurationTests {
 				"http://localhost:" + this.port + "/", String.class);
 
 		assertEquals(HttpStatus.OK, entity.getStatusCode());
-		assertEquals("home",JsonPath.read(entity.getBody(), "$.message"));
+		assertEquals("OK",JsonPath.read(entity.getBody(), "$.status"));
 
 	}
 
