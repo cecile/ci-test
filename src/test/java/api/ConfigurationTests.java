@@ -16,6 +16,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.jayway.jsonpath.JsonPath;
 import java.util.ArrayList;
@@ -55,10 +56,8 @@ public class ConfigurationTests {
 
 	}
 
-	@Test
-	public void testRANDOM() throws Exception {
+	public void testRandom(int numbers) throws Exception {
 
-		final int numbers = 5;
 
 		ResponseEntity<String>  entity = new TestRestTemplate().getForEntity(
 				"http://localhost:" + this.port + "/random/5", String.class);
@@ -68,10 +67,38 @@ public class ConfigurationTests {
 		assertNotNull(JsonPath.read(entity.getBody(), "$.numbers"));
 
 		for(int i=0;i<numbers;i++){
+
 			assertNotNull(JsonPath.read(entity.getBody(), "$.numbers.["+Integer.toString(i)+"]"));
+			assertTrue((int)JsonPath.read(entity.getBody(), "$.numbers.["+Integer.toString(i)+"]")>0);
+
 		}
 
 
+	}
+
+	@Test
+	public void testSingleRandom() throws Exception {
+
+		ResponseEntity<String>  entity = new TestRestTemplate().getForEntity(
+				"http://localhost:" + this.port + "/random", String.class);
+
+		assertEquals(HttpStatus.OK, entity.getStatusCode());
+
+		assertNotNull(JsonPath.read(entity.getBody(), "$.numbers"));
+
+		assertNotNull(JsonPath.read(entity.getBody(), "$.numbers.[0]"));
+
+		assertTrue((int)JsonPath.read(entity.getBody(), "$.numbers.[0]")>0);
+
+
+	}
+
+	@Test
+	public void testMultipleRandom() throws Exception {
+
+		testRandom(2);
+		testRandom(3);
+		testRandom(4);
 	}
 
 }

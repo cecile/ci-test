@@ -17,15 +17,20 @@ public class Application {
 
 	@RequestMapping("/")
 	public StandardOutput home() {
-		StandardOutput message = new StandardOutput("home");
-		return message;
+		return new StandardOutput("home");
 	}
-
 
 	@RequestMapping("/random/{numbers}")
 	public @ResponseBody RandomGenerator conversion(@PathVariable("numbers") int numbers) {
 
 		return new RandomGenerator(numbers);
+
+	}
+
+	@RequestMapping("/random")
+	public @ResponseBody RandomGenerator conversion() {
+
+		return conversion(1);
 
 	}
 
