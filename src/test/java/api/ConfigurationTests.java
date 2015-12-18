@@ -19,11 +19,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.jayway.jsonpath.JsonPath;
+
 import java.util.ArrayList;
 
 /**
  * Basic integration tests for service.
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -32,73 +32,71 @@ import java.util.ArrayList;
 @DirtiesContext
 public class ConfigurationTests {
 
-	@Value("${local.server.port}")
-	private int port;
+    @Value("${local.server.port}")
+    private int port;
 
-	@Test
-	public void testStatus() throws Exception {
+    @Test
+    public void testStatus() throws Exception {
 
-		ResponseEntity<String> entity = new TestRestTemplate().getForEntity(
-				"http://localhost:" + this.port + "/health", String.class);
+        ResponseEntity<String> entity = new TestRestTemplate().getForEntity(
+                "http://localhost:" + this.port + "/health", String.class);
 
-		assertEquals(HttpStatus.OK, entity.getStatusCode());
-		assertEquals("UP",JsonPath.read(entity.getBody(), "$.status"));
-	}
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
+        assertEquals("UP", JsonPath.read(entity.getBody(), "$.status"));
+    }
 
-	@Test
-	public void testHome() throws Exception {
+    @Test
+    public void testHome() throws Exception {
 
-		ResponseEntity<String>  entity = new TestRestTemplate().getForEntity(
-				"http://localhost:" + this.port + "/", String.class);
+        ResponseEntity<String> entity = new TestRestTemplate().getForEntity(
+                "http://localhost:" + this.port + "/", String.class);
 
-		assertEquals(HttpStatus.OK, entity.getStatusCode());
-		assertEquals("OK",JsonPath.read(entity.getBody(), "$.status"));
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
+        assertEquals("OK", JsonPath.read(entity.getBody(), "$.status"));
 
-	}
+    }
 
-	public void testRandom(int numbers) throws Exception {
+    public void testRandom(int numbers) throws Exception {
 
+        ResponseEntity<String> entity = new TestRestTemplate().getForEntity(
+                "http://localhost:" + this.port + "/random/5", String.class);
 
-		ResponseEntity<String>  entity = new TestRestTemplate().getForEntity(
-				"http://localhost:" + this.port + "/random/5", String.class);
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
 
-		assertEquals(HttpStatus.OK, entity.getStatusCode());
+        assertNotNull(JsonPath.read(entity.getBody(), "$.numbers"));
 
-		assertNotNull(JsonPath.read(entity.getBody(), "$.numbers"));
+        for (int i = 0; i < numbers; i++) {
 
-		for(int i=0;i<numbers;i++){
+            assertNotNull(JsonPath.read(entity.getBody(), "$.numbers.[" + Integer.toString(i) + "]"));
+            assertTrue((int) JsonPath.read(entity.getBody(), "$.numbers.[" + Integer.toString(i) + "]") > 0);
 
-			assertNotNull(JsonPath.read(entity.getBody(), "$.numbers.["+Integer.toString(i)+"]"));
-			assertTrue((int)JsonPath.read(entity.getBody(), "$.numbers.["+Integer.toString(i)+"]")>0);
+        }
 
-		}
+    }
 
+    @Test
+    public void testSingleRandom() throws Exception {
 
-	}
+        ResponseEntity<String> entity = new TestRestTemplate().getForEntity(
+                "http://localhost:" + this.port + "/random", String.class);
 
-	@Test
-	public void testSingleRandom() throws Exception {
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
 
-		ResponseEntity<String>  entity = new TestRestTemplate().getForEntity(
-				"http://localhost:" + this.port + "/random", String.class);
+        assertNotNull(JsonPath.read(entity.getBody(), "$.numbers"));
 
-		assertEquals(HttpStatus.OK, entity.getStatusCode());
+        assertNotNull(JsonPath.read(entity.getBody(), "$.numbers.[0]"));
 
-		assertNotNull(JsonPath.read(entity.getBody(), "$.numbers"));
+        assertTrue((int) JsonPath.read(entity.getBody(), "$.numbers.[0]") > 0);
 
-		assertNotNull(JsonPath.read(entity.getBody(), "$.numbers.[0]"));
+    }
 
-		assertTrue((int)JsonPath.read(entity.getBody(), "$.numbers.[0]")>0);
+    @Test
+    public void testMultipleRandom() throws Exception {
 
+        testRandom(2);
+        testRandom(3);
+        testRandom(4);
 
-	}
-
-	@Test
-	public void testMultipleRandom() throws Exception {
-
-		testRandom(2);
-		testRandom(3);
-		testRandom(4);
-	}
+    }
 
 }

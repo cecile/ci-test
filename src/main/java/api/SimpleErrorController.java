@@ -20,8 +20,10 @@ public class SimpleErrorController implements ErrorController {
 
     @Autowired
     public SimpleErrorController(ErrorAttributes errorAttributes) {
+
         Assert.notNull(errorAttributes, "ErrorAttributes must not be null");
         this.errorAttributes = errorAttributes;
+
     }
 
     @Override
@@ -30,17 +32,23 @@ public class SimpleErrorController implements ErrorController {
     }
 
     @RequestMapping
-    public Map<String, Object> error(HttpServletRequest aRequest){
+    public Map<String, Object> error(HttpServletRequest aRequest) {
+
         return getErrorAttributes(aRequest, getTraceParameter(aRequest));
+
     }
 
     private boolean getTraceParameter(HttpServletRequest request) {
+
         String parameter = request.getParameter("trace");
-        return parameter!=null && !"false".equals(parameter.toLowerCase());
+        return parameter != null && !"false".equals(parameter.toLowerCase());
+
     }
 
     private Map<String, Object> getErrorAttributes(HttpServletRequest aRequest, boolean includeStackTrace) {
+
         RequestAttributes requestAttributes = new ServletRequestAttributes(aRequest);
         return errorAttributes.getErrorAttributes(requestAttributes, includeStackTrace);
+
     }
 }

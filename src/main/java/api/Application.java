@@ -14,32 +14,38 @@ import java.util.Map;
 @RestController
 public class Application {
 
-	@RequestMapping("/")
-	public Map<String, Object> home() {
+    @RequestMapping("/")
+    public Map<String, Object> home() {
 
-		Map<String,Object> body = new HashMap<>();
+        Map<String, Object> body = new HashMap<>();
 
-		body.put("status","OK");
+        body.put("status", "OK");
 
-		return body;
-	}
+        return body;
+    }
 
-	@RequestMapping("/random/{numbers}")
-	public @ResponseBody RandomGenerator conversion(@PathVariable("numbers") int numbers) {
+    @RequestMapping("/random/{numbers}")
+    public
+    @ResponseBody
+    RandomGenerator conversion(@PathVariable("numbers") int numbers) {
 
-		return new RandomGenerator(numbers);
+        return new RandomGenerator(numbers);
 
-	}
+    }
 
-	@RequestMapping("/random")
-	public @ResponseBody RandomGenerator conversion() {
+    @RequestMapping("/random")
+    public
+    @ResponseBody
+    RandomGenerator conversion() {
 
-		return conversion(1);
+        return conversion(1);
 
-	}
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
+    public static void main(String[] args) {
+
+        SpringApplication.run(Application.class, args);
+
+    }
 
 }
