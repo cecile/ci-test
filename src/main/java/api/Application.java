@@ -19,7 +19,7 @@ public class Application {
 
         Map<String, Object> body = new HashMap<>();
 
-        body.puti("status", "OK");
+        body.put("status", "OKkk");
 
 
         return body;
