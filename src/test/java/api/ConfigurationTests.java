@@ -35,7 +35,7 @@ public class ConfigurationTests {
     @Value("${local.server.port}")
     private int port;
 
-    @Test
+/*    @Test
     public void testStatus() throws Exception {
 
         ResponseEntity<String> entity = new TestRestTemplate().getForEntity(
@@ -43,7 +43,7 @@ public class ConfigurationTests {
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
         assertEquals("UP", JsonPath.read(entity.getBody(), "$.status"));
-    }
+    }*/
 
     @Test
     public void testHome() throws Exception {
@@ -56,7 +56,7 @@ public class ConfigurationTests {
 
     }
 
-    public void testRandom(int numbers) throws Exception {
+/*    public void testRandom(int numbers) throws Exception {
 
         ResponseEntity<String> entity = new TestRestTemplate().getForEntity(
                 "http://localhost:" + this.port + "/random/5", String.class);
@@ -97,6 +97,6 @@ public class ConfigurationTests {
         testRandom(3);
         testRandom(4);
 
-    }
+    }*/
 
 }
